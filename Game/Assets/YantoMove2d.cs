@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
+public class YantoMove2d : MonoBehaviour
 {
     public float JumpForce;
     public float DownForce;
