@@ -19,13 +19,13 @@ public class Grounded : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision){
         if(collision.collider.tag == "Ground"){
-            Player.GetComponent<PlayerControl>().isGrounded = true;
+            Player.GetComponent<YantoMove2d>().isGrounded = true;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision){
        if(collision.collider.tag == "Ground"){
-            Player.GetComponent<PlayerControl>().isGrounded = false;
+            Player.GetComponent<YantoMove2d>().isGrounded = false;
         }
     }
 }
