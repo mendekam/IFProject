@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YantoMove2d : MonoBehaviour
+public class PlayerControl : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    bool facingRight = true;
+    public float JumpForce;
+    public float DownForce;
+    public float speed;
+    public bool isGrounded = false;
     Rigidbody2D rb;
+
+    bool facingRight = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,32 +20,41 @@ public class YantoMove2d : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FlipPlayer();
+        PlayerJump();
         FlipTrigger();
-        Jump();
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
-        transform.position += movement * Time.deltaTime * moveSpeed;
     }
 
-    void Jump(){
-        if (Input.GetButtonDown("Jump")){
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 5f), ForceMode2D.Impulse);
-
-        }
+    private void FixedUpdate(){
+        PlayerMovement();
     }
-    
+
+    void PlayerMovement(){
+        float x = Input.GetAxisRaw("Horizontal");
+        Vector3 movement = new Vector3(x * speed, rb.velocity.y, 0f);
+        rb.velocity = movement;
+    }
+
     void FlipTrigger(){
-        if(transform.position < 0 && facingRight){
+        if(rb.velocity.x < 0 && facingRight){
             FlipPlayer();
-        }else if(transform.position > 0 && !facingRight){
+        }else if(rb.velocity.x > 0 && !facingRight){
             FlipPlayer();
         }
     }
-    
+
     void FlipPlayer(){
         facingRight = !facingRight;
+
         Vector3 scaler = transform.localScale;
         scaler.x *= -1;
         transform.localScale = scaler;
+    }
+
+    void PlayerJump(){
+        if(Input.GetKeyDown(KeyCode.UpArrow) && isGrounded == true){
+            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+        }else if(Input.GetKeyDown(KeyCode.DownArrow)){
+            rb.velocity = new Vector2(rb.velocity.x, DownForce * -1);
+        }
     }
 }
